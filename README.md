@@ -171,7 +171,7 @@ src/
 ## 6. Live Demo
 
 **See the app live:**  
-👉 [https://task-management-app-ywb9.onrender.com/login](https://task-management-app-ywb9.onrender.com/login)
+👉 [https://task-management-app-ywb9.onrender.com/login](https://task-management-app-ywb9.onrender.com/)
 
 ---
 
