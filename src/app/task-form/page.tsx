@@ -1,11 +1,12 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import TaskForm from "@/components/TaskForm";
 import { useCreateTask, useUpdateTask, useTasks } from "@/hooks/useTasks";
 
-export default function TaskFormPage() {
+// This component uses useSearchParams which needs to be wrapped in Suspense
+function TaskFormContent() {
   const router = useRouter();
   const params = useSearchParams();
   const { data: session, status } = useSession();
@@ -60,5 +61,14 @@ export default function TaskFormPage() {
         ← Back to Dashboard
       </button>
     </div>
+  );
+}
+
+// Wrap the component that uses useSearchParams in a Suspense boundary
+export default function TaskFormPage() {
+  return (
+    <Suspense fallback={<div>Loading form...</div>}>
+      <TaskFormContent />
+    </Suspense>
   );
 }

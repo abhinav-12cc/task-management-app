@@ -1,10 +1,10 @@
 import { connectDB } from "@/lib/db";
 import Task from "@/models/Task";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: Request): Promise<NextResponse> {
   await connectDB();
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
@@ -34,7 +34,7 @@ export async function GET(req: Request) {
   return NextResponse.json({ tasks, total });
 }
 
-export async function POST(req: Request) {
+export async function POST(req: Request): Promise<NextResponse> {
   await connectDB();
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {

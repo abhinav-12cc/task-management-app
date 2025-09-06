@@ -1,19 +1,21 @@
 import { connectDB } from "@/lib/db";
 import Task from "@/models/Task";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { NextResponse } from "next/server";
 
+type Params = { params: { id: string } };
+
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+  request: Request,
+  { params }: Params
+): Promise<NextResponse> {
   await connectDB();
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { title, description, status } = await req.json();
+  const { title, description, status } = await request.json();
   const userId = (session.user as any).id || (session as any).token?.sub;
   const task = await Task.findOne({ _id: params.id, user: userId });
   if (!task) {
@@ -27,9 +29,9 @@ export async function PUT(
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+  request: Request,
+  { params }: Params
+): Promise<NextResponse> {
   await connectDB();
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
